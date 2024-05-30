@@ -1,0 +1,750 @@
+{
+  "version": "0.1.0",
+  "name": "solchat",
+  "constants": [
+    {
+      "name": "USER_SEED",
+      "type": "string",
+      "value": "\"user\""
+    },
+    {
+      "name": "GROUP_SEED",
+      "type": "string",
+      "value": "\"group\""
+    }
+  ],
+  "instructions": [
+    {
+      "name": "initializeUser",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "rsaPublicKey",
+          "type": {
+            "array": [
+              "u8",
+              216
+            ]
+          }
+        },
+        {
+          "name": "username",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "createGroup",
+      "accounts": [
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "user0",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user1",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "groupId",
+          "type": "u64"
+        },
+        {
+          "name": "groupName",
+          "type": "string"
+        },
+        {
+          "name": "isDm",
+          "type": "bool"
+        },
+        {
+          "name": "members",
+          "type": {
+            "vec": "publicKey"
+          }
+        },
+        {
+          "name": "encryptedUserKeys",
+          "type": {
+            "vec": {
+              "array": [
+                "u8",
+                128
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "addUserToGroup",
+      "accounts": [
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userAcc",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "groupId",
+          "type": "u64"
+        },
+        {
+          "name": "user",
+          "type": "publicKey"
+        },
+        {
+          "name": "encryptedUserKey",
+          "type": {
+            "array": [
+              "u8",
+              128
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "removeUserFromGroup",
+      "accounts": [
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userAcc",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "groupId",
+          "type": "u64"
+        },
+        {
+          "name": "user",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
+      "name": "sendMessage",
+      "accounts": [
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "groupId",
+          "type": "u64"
+        },
+        {
+          "name": "encryptedMessage",
+          "type": "bytes"
+        },
+        {
+          "name": "iv",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "upgradeGroupVersion",
+      "accounts": [
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "groupId",
+          "type": "u64"
+        },
+        {
+          "name": "encryptedUserKeys",
+          "type": {
+            "vec": {
+              "array": [
+                "u8",
+                128
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "changeGroupName",
+      "accounts": [
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "groupId",
+          "type": "u64"
+        },
+        {
+          "name": "newName",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "changeUserPermissions",
+      "accounts": [
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "groupId",
+          "type": "u64"
+        },
+        {
+          "name": "user",
+          "type": "publicKey"
+        },
+        {
+          "name": "newPermissions",
+          "type": {
+            "defined": "UserPermissions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "deleteMessage",
+      "accounts": [
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "groupId",
+          "type": "u64"
+        },
+        {
+          "name": "messageId",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "changeDefaultPermissions",
+      "accounts": [
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "groupId",
+          "type": "u64"
+        },
+        {
+          "name": "newPermissions",
+          "type": {
+            "defined": "UserPermissions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "acceptChat",
+      "accounts": [
+        {
+          "name": "userAcc",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "group",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
+      "name": "leaveChat",
+      "accounts": [
+        {
+          "name": "userAcc",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "group",
+          "type": "publicKey"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Group",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "isDm",
+            "type": "bool"
+          },
+          {
+            "name": "groupName",
+            "type": "string"
+          },
+          {
+            "name": "groupId",
+            "type": "u64"
+          },
+          {
+            "name": "members",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "messageIdCounter",
+            "type": "u64"
+          },
+          {
+            "name": "defaultPermissions",
+            "type": {
+              "defined": "UserPermissions"
+            }
+          },
+          {
+            "name": "userPermissions",
+            "type": {
+              "vec": {
+                "defined": "UserPermissions"
+              }
+            }
+          },
+          {
+            "name": "encryptedUserKeys",
+            "type": {
+              "vec": {
+                "vec": {
+                  "array": [
+                    "u8",
+                    128
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "name": "messages",
+            "type": {
+              "vec": {
+                "defined": "Message"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "User",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "rsaPublicKey",
+            "type": {
+              "array": [
+                "u8",
+                216
+              ]
+            }
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "chats",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "acceptedChats",
+            "type": {
+              "vec": "publicKey"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "Message",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "sender",
+            "type": "publicKey"
+          },
+          {
+            "name": "encryptedMessage",
+            "type": "bytes"
+          },
+          {
+            "name": "iv",
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "version",
+            "type": "u64"
+          },
+          {
+            "name": "messageId",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserPermissions",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "sendMessages",
+            "type": "bool"
+          },
+          {
+            "name": "addUsers",
+            "type": "bool"
+          },
+          {
+            "name": "removeUsers",
+            "type": "bool"
+          },
+          {
+            "name": "changePermissions",
+            "type": "bool"
+          },
+          {
+            "name": "changeName",
+            "type": "bool"
+          },
+          {
+            "name": "deleteMessages",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Permission",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "SendMessage"
+          },
+          {
+            "name": "AddUser"
+          },
+          {
+            "name": "RemoveUser"
+          },
+          {
+            "name": "ChangePermissions"
+          },
+          {
+            "name": "ChangeName"
+          },
+          {
+            "name": "DeleteMessages"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "UsernameTooLong",
+      "msg": "Username too long"
+    },
+    {
+      "code": 6001,
+      "name": "UsernameTooShort",
+      "msg": "Username too short"
+    },
+    {
+      "code": 6002,
+      "name": "GroupNameTooLong",
+      "msg": "Group name too long"
+    },
+    {
+      "code": 6003,
+      "name": "GroupNameTooShort",
+      "msg": "Group name too short"
+    },
+    {
+      "code": 6004,
+      "name": "TooManyMembersInit",
+      "msg": "Can't initialize group with more than 2 members"
+    },
+    {
+      "code": 6005,
+      "name": "TooFewMembersInit",
+      "msg": "Can't initialize group with less than 2 members"
+    },
+    {
+      "code": 6006,
+      "name": "TooFewEncryptedKeys",
+      "msg": "Didn't provide encrypted keys for all members"
+    },
+    {
+      "code": 6007,
+      "name": "NotGroupOwner",
+      "msg": "Not group owner"
+    },
+    {
+      "code": 6008,
+      "name": "NotInGroup",
+      "msg": "Not in group"
+    },
+    {
+      "code": 6009,
+      "name": "MessageTooShort",
+      "msg": "Message too short"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidUserKeysLenght",
+      "msg": "Invalid user keys length"
+    },
+    {
+      "code": 6011,
+      "name": "CannotRemoveOwner",
+      "msg": "Cannot remove owner"
+    },
+    {
+      "code": 6012,
+      "name": "CannotChangeMemberDM",
+      "msg": "Cannot change member in DM"
+    },
+    {
+      "code": 6013,
+      "name": "UserNotInGroup",
+      "msg": "User not in group"
+    },
+    {
+      "code": 6014,
+      "name": "InsufficientPermissions",
+      "msg": "Insufficient permissions"
+    },
+    {
+      "code": 6015,
+      "name": "MessageNotFound",
+      "msg": "Message not found"
+    },
+    {
+      "code": 6016,
+      "name": "AlreadyInChat",
+      "msg": "Already In Chat"
+    },
+    {
+      "code": 6017,
+      "name": "IncorrectUser",
+      "msg": "Incorrect User"
+    }
+  ],
+  "metadata": {
+    "address": "9dBYNp2M6waWyDhpXptBAALAEuV5MHCZUUB9eTpufbbS",
+    "origin": "anchor"
+  }
+}
